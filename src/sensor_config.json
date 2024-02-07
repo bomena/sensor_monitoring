@@ -1,0 +1,10 @@
+[
+    {"id": "sensor_color1", "topic": "/cam1/image_color/compressed", "type": "CompressedImage"},
+    {"id": "sensor_color2", "topic": "/cam2/image_color/compressed", "type": "CompressedImage"},
+    {"id": "sensor_gps", "topic": "sensor_msgs/NavSatFix", "type": "GPSFix"},
+    {"id": "sensor_imu", "topic": "/gx5/imu/data", "type": "Imu"},
+    {"id": "sensor_lwir1", "topic": "/lwir1/image_raw/compressed", "type": "CompressedImage"},
+    {"id": "sensor_lwir2", "topic": "/lwir2/image_raw/compressed", "type": "CompressedImage"},
+    {"id": "sensor_lidar", "topic": "/ouster/points", "type": "PointCloud2"}
+]
+  
