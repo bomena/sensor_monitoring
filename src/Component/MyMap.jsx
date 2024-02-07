@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import sensorConfig from '../sensorConfig.json';
 import 'leaflet/dist/leaflet.css';
+import ROSLIB from 'roslib';
 
 const UpdateMapView = ({ position }) => {
     const map = useMap();
@@ -16,38 +17,47 @@ const UpdateMapView = ({ position }) => {
 
 const MyMap = () => {
   const [position, setPosition] = useState(null);
-  
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:9090');
+    // Connect to ROSBridge
+    const ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', () => {
+      console.log('Connected to websocket server.');
+    });
+
+    ros.on('error', (error) => {
+      console.log('Error connecting to websocket server: ', error);
+    });
+
+    ros.on('close', () => {
+      console.log('Connection to websocket server closed.');
+    });
+
+    // Subscribe to the GPS topic
+    const gpsTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: sensorConfig.GPS.topic,
+      messageType: sensorConfig.GPS.messageType
+    });
+
     let dataTimeout;
 
-    ws.onopen = () => {
-      // ROSbridge를 통해 NavSatFix 메시지 구독
-      const gpsConfig = sensorConfig.GPS;
-      ws.send(JSON.stringify({
-        op: 'subscribe',
-        topic: gpsConfig.topic, // GPS topic from sensorConfig
-        type: gpsConfig.messageType // GPS message type from sensorConfig
-      }));
-    };
+    gpsTopic.subscribe((message) => {
+      const { latitude, longitude } = message;
+      setPosition([latitude, longitude]);
 
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.msg) {
-        const { latitude, longitude } = message.msg;
-        setPosition([latitude, longitude]);
-
-        // Reset the timer on new data
-        clearTimeout(dataTimeout);
-        dataTimeout = setTimeout(() => {
-          setPosition(null);
-        }, 3000); // Set to null after 5 seconds of no new data
-      }
-    };
+      // Reset the timer on new data
+      clearTimeout(dataTimeout);
+      dataTimeout = setTimeout(() => {
+        setPosition(null);
+      }, 3000); // Set to null after 3 seconds of no new data
+    });
 
     return () => {
-      ws.close();
+      gpsTopic.unsubscribe();
       clearTimeout(dataTimeout);
     };
   }, []);
