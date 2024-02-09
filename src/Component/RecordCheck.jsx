@@ -23,7 +23,7 @@ const RosbagStatus = () => {
 
   return (
     <div>
-      <h2>:  {rosbagStatus}</h2>
+      <h1>:  {rosbagStatus}</h1>
     </div>
   );
 };

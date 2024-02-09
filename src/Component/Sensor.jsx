@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 import '../index.css';
 import sensorConfig from '../sensorConfig.json';
-import noSignalImage from '../svg/noSignal.png'; // Correctly import the image
+import noSignalImage from '../svg/black.png';
 
 let active = false;
 const Sensor = () => {
-  const [imageSrc1, setImageSrc1] = useState(noSignalImage); // Use imported image reference
-  const [imageSrc2, setImageSrc2] = useState(noSignalImage); // Use imported image reference
-  const [lidarSrc, setLidarSrc] = useState(noSignalImage); // Use imported image reference
+  const [imageSrc1, setImageSrc1] = useState(noSignalImage);
+  const [imageSrc2, setImageSrc2] = useState(noSignalImage);
+  const [lidarSrc, setLidarSrc] = useState(noSignalImage);
   
   useEffect(() => {
     const ros = new ROSLIB.Ros({

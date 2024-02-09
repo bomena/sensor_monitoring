@@ -26,13 +26,6 @@ function RosConnection() {
       ros.close();
     };
   }, []);
-
-  // return (
-  //   <>
-  //     <div />
-      
-  //   </>   
-  // )
 }
 
 export default RosConnection;

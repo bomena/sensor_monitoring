@@ -16,7 +16,7 @@ const SetViz = (props) => {
       <div className="grid">
         <div>
           <RosbagSize />
-          <h2>Recording Status</h2>
+          <h1>Recording Status</h1>
           <RosbagStatus />
         </div>
         <div className='sensor_sync'>
@@ -26,7 +26,7 @@ const SetViz = (props) => {
           <MyMap />
         </div>
         <div className='sensor_title'>
-          <h2>Sensor Connectivity Status</h2>
+          <h1>Sensor Status</h1>
         </div>
         <div className='sensor_state'>
           <DataStreamButtons />

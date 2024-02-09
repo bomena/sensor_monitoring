@@ -3,7 +3,7 @@ import ROSLIB from 'roslib';
 
 const RosbagSize = () => {
   const [ros] = useState(new ROSLIB.Ros({ url: 'ws://localhost:9090' }));
-  const [rosbagSize, setRosbagSize] = useState('0 MB');
+  const [rosbagSize, setRosbagSize] = useState('0 GB');
 
   useEffect(() => {
     const sizeListener = new ROSLIB.Topic({

@@ -57,12 +57,12 @@ const DataStreamButtons = () => {
   }, []);
 
   const getButtonStyle = (isActive) => ({
-    padding: '10px 20px',
+    padding: '15px 25px',
     margin: '5px',
     border: 'none',
     borderRadius: '5px',
     backgroundColor: isActive ? 'blue' : 'black',
-    fontSize: '20px',
+    fontSize: '30px',
     color: 'white',
     cursor: 'pointer',
   });

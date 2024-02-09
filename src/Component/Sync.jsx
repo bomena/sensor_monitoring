@@ -54,9 +54,9 @@ const SensorSyncStatus = () => {
   return (
     <div style={getButtonStyle(syncStatus.is_synced)}>
       <div style={{ padding: '10px' }}>
-        <h2>Sensor Synchronization ( per 5s )</h2>
-        <p style={{ fontSize: '20px' }}>Is Synced: {syncStatus.is_synced ? 'Yes' : 'No'}</p>
-        <p style={{ fontSize: '20px' }}>Max Time Difference: {syncStatus.max_time_diff.toFixed(3)} s</p>
+        <h1>Sensor Synchronization ( per 5s )</h1>
+        <p style={{ fontSize: '25px' }}>Is Synced: {syncStatus.is_synced ? 'Yes' : 'No'}</p>
+        <p style={{ fontSize: '25px' }}>Max Time Difference: {syncStatus.max_time_diff.toFixed(3)} s</p>
       </div>
     </div>
   );
