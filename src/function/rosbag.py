@@ -7,11 +7,7 @@ from std_srvs.srv import SetBool, SetBoolResponse
 from std_msgs.msg import String
 import datetime
 
-##################### Modify #########################
-# rosbag record path
-path = "/media/user/PortableSSD/dataset"
-######################################################
-
+path = "/home/dataset"
 rosbag_process = None
 
 # Rosbag 녹음 상태 확인
