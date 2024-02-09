@@ -37,7 +37,7 @@ sleep 2  # Give roslaunch time to start
 # run.sh 스크립트 실행
 # 현재 디렉토리를 저장하고 run.sh가 있는 디렉토리로 이동
 CURRENT_DIR=$(pwd)
-cd /home/user/Web/sensor_monitoring/src/function
+cd ./src/function
 
 # run.sh 실행
 ./run.sh &
