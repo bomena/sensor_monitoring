@@ -7,7 +7,11 @@ from std_srvs.srv import SetBool, SetBoolResponse
 from std_msgs.msg import String
 import datetime
 
+##################### Modify #########################
+# rosbag record path
 path = "/media/user/PortableSSD/dataset"
+######################################################
+
 rosbag_process = None
 
 # Rosbag 녹음 상태 확인
@@ -21,16 +25,15 @@ def get_rosbag_size():
     global path
     list_of_files = glob.glob(path + '/*.bag.active')
     if not list_of_files:
-        return "0 MB"
+        return "0 GB"
 
     latest_file = max(list_of_files, key=os.path.getctime)
     size = os.path.getsize(latest_file)
 
     # Bytes를 MB로 변환
-    size_mb = size / (1024 * 1024)
-    return f"{size_mb:.2f} MB"
+    size_mb = size / (1024 * 1024) * 0.001
+    return f"{size_mb:.3f} GB"
 
-# 메인 함수
 def main():
     rospy.init_node('rosbag_control_node')
 

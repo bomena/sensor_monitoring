@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import rospy
 import numpy as np
 import cv2
@@ -12,7 +11,11 @@ class PointCloudToImage:
     def __init__(self):
         self.bridge = CvBridge()
         self.image_pub = rospy.Publisher("/converted_image/compressed", CompressedImage, queue_size=1)
+
+        ################################ MODIFY ####################################
         rospy.Subscriber("/ouster/points", PointCloud2, self.callback)
+        ############################################################################
+
         self.last_time = time.time()
         self.interval = 1  # 이미지를 전송할 시간 간격 (초)
 
@@ -36,15 +39,15 @@ class PointCloudToImage:
                 rospy.logerr(e)
 
     def convert_to_image(self, points):
-        height = 420
+        height = 411
         width = 880
         image = np.zeros((height, width, 3), np.uint8)
 
         # Define fixed scale factors based on expected range of x and y values
-        fixed_max_x = 10  # Adjust based on expected max value of x
-        fixed_min_x = -10  # Adjust based on expected min value of x
-        fixed_max_y = 10  # Adjust based on expected max value of y
-        fixed_min_y = -10  # Adjust based on expected min value of y
+        fixed_max_x = 40  # Adjust based on expected max value of x
+        fixed_min_x = -40  # Adjust based on expected min value of x
+        fixed_max_y = 20  # Adjust based on expected max value of y
+        fixed_min_y = -20  # Adjust based on expected min value of y
 
         for point in points:
             # Use fixed scale factors for conversion
