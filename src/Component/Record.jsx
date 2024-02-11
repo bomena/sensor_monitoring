@@ -29,7 +29,7 @@ const RosbagControl = () => {
   
 
   const handleServiceCall = (action) => {
-    const ros = new ROSLIB.Ros({ url: 'ws://localhost:9090' });
+    const ros = new ROSLIB.Ros({ url: 'ws://0.0.0.0:9090' });
     const service = new ROSLIB.Service({
       ros: ros,
       name: '/rosbag_control',
