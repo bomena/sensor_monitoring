@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 const RosbagStatus = () => {
-  const [ros] = useState(new ROSLIB.Ros({ url: 'ws://localhost:9090' }));
+  const [ros] = useState(new ROSLIB.Ros({ url: 'ws://0.0.0.0:9090' }));
   const [rosbagStatus, setRosbagStatus] = useState('no');
 
   useEffect(() => {
