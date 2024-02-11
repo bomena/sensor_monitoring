@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
 
 function RosConnection() {
   useEffect(() => {
-    const ros = new ROSLIB.Ros({ url: "ws://localhost:9090" });
+    const ros = new ROSLIB.Ros({ url: "ws://0.0.0.0:9090" });
     ros.on('connection', () => {
       console.log('Connected to websocket server.');
     });
