@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
-import sensorConfig from '../sensorConfig.json';
+import sensorConfig from '../sensorConfig2.json';
+
+
 
 const DataStreamButtons = () => {
   const [sensorData, setSensorData] = useState(
@@ -11,8 +13,15 @@ const DataStreamButtons = () => {
   );
 
   useEffect(() => {
-    const ros = new ROSLIB.Ros({
-      url: 'ws://0.0.0.0:9090'
+    const ros = new ROSLIB.Ros({url: 'ws://0.0.0.0:9090'});
+    ros.on('connection', () => {
+      console.log('Connected to websocket server.');
+    });
+    ros.on('error', () => {
+      console.log('Error');
+    });
+    ros.on('close', () => {
+      console.log('Closed to websocket server.');
     });
     Object.entries(sensorConfig).forEach(([key, { topic, messageType }]) => {
       const sensorTopic = new ROSLIB.Topic({
@@ -53,6 +62,7 @@ const DataStreamButtons = () => {
         });
         sensorTopic.unsubscribe();
       });
+      ros.close();
     };
   }, []);
 

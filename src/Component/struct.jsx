@@ -1,7 +1,6 @@
 import React from 'react';
 import MyMap from './MyMap';
-// import RosbagControl from './Record';
-import RosbagStatus from './RecordCheck';
+import RosbagRecord from './RosbagRecord';
 import DataStreamButtons from './SensorState';
 import SensorSyncStatus from './Sync';
 import RosbagSize from './FileSize';
@@ -17,7 +16,7 @@ const SetViz = (props) => {
         <div>
           <RosbagSize />
           <h1>Recording Status</h1>
-          <RosbagStatus />
+          <RosbagRecord />
         </div>
         <div className='sensor_sync'>
           <SensorSyncStatus />

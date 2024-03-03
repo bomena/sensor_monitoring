@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
-import sensorConfig from '../sensorConfig.json';
+import sensorConfig from '../sensorConfig2.json';
 import 'leaflet/dist/leaflet.css';
 import ROSLIB from 'roslib';
 
@@ -20,10 +20,8 @@ const MyMap = () => {
 
   useEffect(() => {
     // Connect to ROSBridge
-    const ros = new ROSLIB.Ros({
-      url: 'ws://0.0.0.0:9090'
-    });
-
+    const ros = new ROSLIB.Ros({url: 'ws://0.0.0.0:9090'});
+    
     ros.on('connection', () => {
       console.log('Connected to websocket server.');
     });
@@ -59,6 +57,7 @@ const MyMap = () => {
     return () => {
       gpsTopic.unsubscribe();
       clearTimeout(dataTimeout);
+      ros.close();
     };
   }, []);
 

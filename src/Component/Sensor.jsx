@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 import '../index.css';
-import sensorConfig from '../sensorConfig.json';
+import sensorConfig from '../sensorConfig2.json';
 import noSignalImage from '../svg/black.png';
 
 let active = false;
+
+
 const Sensor = () => {
   const [imageSrc1, setImageSrc1] = useState(noSignalImage);
   const [imageSrc2, setImageSrc2] = useState(noSignalImage);
   const [lidarSrc, setLidarSrc] = useState(noSignalImage);
   
   useEffect(() => {
-    const ros = new ROSLIB.Ros({
-      url: 'ws://0.0.0.0:9090'
+    const ros = new ROSLIB.Ros({url: 'ws://0.0.0.0:9090'});
+    ros.on('connection', () => {
+      console.log('Connected to websocket server.');
+    });
+    ros.on('error', () => {
+      console.log('Error');
+    });
+    ros.on('close', () => {
+      console.log('Closed to websocket server.');
     });
 
     const handleImageMessage = (sensorId, message) => {
@@ -62,6 +71,7 @@ const Sensor = () => {
           }
         }
       });
+      ros.close();
     };
   }, []);
 

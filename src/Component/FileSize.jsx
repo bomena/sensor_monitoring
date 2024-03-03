@@ -1,25 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ROSLIB from 'roslib';
 
 const RosbagSize = () => {
-  const [ros] = useState(new ROSLIB.Ros({ url: 'ws://0.0.0.0:9090' }));
   const [rosbagSize, setRosbagSize] = useState('0 GB');
+  const sizeListener = useRef(null);
 
   useEffect(() => {
-    const sizeListener = new ROSLIB.Topic({
+    const ros = new ROSLIB.Ros({ url: 'ws://0.0.0.0:9090' });
+
+    ros.on('connection', () => {
+      console.log('Connected to websocket server.');
+    });
+    ros.on('error', () => {
+      console.log('Error');
+    });
+    ros.on('close', () => {
+      console.log('Closed to websocket server.');
+    });
+
+    sizeListener.current = new ROSLIB.Topic({
       ros: ros,
       name: '/rosbag_size',
       messageType: 'std_msgs/String'
     });
+  }, []);
 
-    sizeListener.subscribe((message) => {
+  useEffect(() => {
+    sizeListener.current.subscribe((message) => {
       setRosbagSize(message.data);
     });
-
-    return () => {
-      sizeListener.unsubscribe();
-    };
-  }, [ros]);
+  })
 
   return (
     <p>{rosbagSize}</p>
