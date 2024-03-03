@@ -3,8 +3,7 @@ import rospy
 import subprocess
 import os
 import glob
-from std_srvs.srv import SetBool, SetBoolResponse
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 import datetime
 
 path = "/home/dataset"
