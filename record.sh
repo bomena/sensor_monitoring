@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/Dataset
+cd /home/dataset
 rosbag record -a
