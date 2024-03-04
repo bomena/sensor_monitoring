@@ -40,12 +40,15 @@ sudo docker run --name monitoring -it \
 ```
 $ ./docker.sh
 $ exit
+```
 
 # How to start docker
+```
 $ sudo docker start monitoring
 $ sudo docker exec -it monitoring /bin/bash
-
+```
 # How to run it.
+```
 $ ./run.sh
 ```
 
