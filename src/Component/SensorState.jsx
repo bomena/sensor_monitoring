@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
-import sensorConfig from '../sensorConfig2.json';
-
-
+import sensorConfig from '../sensorConfig.json';
 
 const DataStreamButtons = () => {
   const [sensorData, setSensorData] = useState(
