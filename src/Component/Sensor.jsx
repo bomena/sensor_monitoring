@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 import '../index.css';
-import sensorConfig from '../sensorConfig2.json';
+import sensorConfig from '../sensorConfig.json';
 import noSignalImage from '../svg/black.png';
 
 let active = false;
