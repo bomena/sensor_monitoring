@@ -33,9 +33,9 @@ sudo docker run --name monitoring -it \
 2. sensorConfig.json파일에서 topic과 messageType을 알맞게 변경한다. 형식에 맞춰서 추가 및 삭제는 자유롭다.
 	이때, 되도록 카메라와 라이다의            이름(id)은 바꾸지 않도록 한다. 만약 바꾼다면 그에 맞게 Sensor.jsx 파일에서 해당하는 이름을 전부 변경해야 한다.
 
-3. sensor_monitoring/src/function 에 있는 data_sync.py, lidar2img.py 에서 Subcriber를 알맞게 수정해준다.
+3. sensor_monitoring/src/function 에 있는 data_sync.py, lidar2img.py 에서 Subcriber를 알맞게 수정한다.
 
-
+4. /home/Web/sensor_monitoring/record.sh를 알맞게 수정한다.
 # How to build the dockerfile
 ```
 $ ./docker.sh
