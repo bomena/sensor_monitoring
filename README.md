@@ -1,4 +1,4 @@
-기능:
+# FUNCTION
 
 1. rosbag record 용량 및 기록 & 상태 확인(per 10s)
 2. sensor sync 확인(per 5s) : 최대 차이 시간 출력
@@ -7,47 +7,46 @@
 5. cam과 LiDAR 확인 가능
 
 # DOCKERFILE
-###
-  FROM osrf/ros:noetic-desktop-full
-  
-  RUN \
-    apt-get -qq update && \
-    apt-get -qq upgrade --yes && \
-    apt-get -qq install vim git curl --yes
-  
-  RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-  RUN apt-get -qq install nodejs --yes
-  RUN apt install -y python3-pip
-  
-  WORKDIR /home/Web
-  RUN git clone https://github.com/bomena/sensor_monitoring.git
-  WORKDIR /home/Web/sensor_monitoring
-  RUN chmod +x run.sh
-  RUN chmod +x record.sh
-  RUN npm install
-  RUN apt-get install ros-noetic-rosbridge-suite --yes
-  RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-  RUN apt update
-  WORKDIR /home/Web/sensor_monitoring/src/function
-  RUN chmod +x run.sh
-  WORKDIR /home/Web/sensor_monitoring
+```
+FROM osrf/ros:noetic-desktop-full
+RUN \
+apt-get -qq update && \
+apt-get -qq upgrade --yes && \
+apt-get -qq install vim git curl --yes
+
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get -qq install nodejs --yes
+RUN apt install -y python3-pip
+
+WORKDIR /home/Web
+RUN git clone https://github.com/bomena/sensor_monitoring.git
+WORKDIR /home/Web/sensor_monitoring
+RUN chmod +x run.sh
+RUN chmod +x record.sh
+RUN npm install
+RUN apt-get install ros-noetic-rosbridge-suite --yes
+RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+RUN apt update
+WORKDIR /home/Web/sensor_monitoring/src/function
+RUN chmod +x run.sh
+WORKDIR /home/Web/sensor_monitoring
+```
 
 # docker.sh
-
-###
-  xhost +local:docker
-  sudo docker run --name monitoring -it \
-    --privileged \
-    --env ROS_MASTER_URI=http://localhost:11311 \
-    --net=host \
-    -e DISPLAY=$DISPLAY \
-    -p 3000:3000 \
-    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
-    -v /dev:/dev \
-    -v <PATH>:/home/dataset \
-    -w /home/Web/sensor_monitoring \
-    monitoring:latest
-
+```
+xhost +local:docker
+sudo docker run --name monitoring -it \
+	--privileged \
+	--env ROS_MASTER_URI=http://localhost:11311 \
+	--net=host \
+	-e DISPLAY=$DISPLAY \
+	-p 3000:3000 \
+	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+	-v /dev:/dev \
+	-v <PATH>:/home/dataset \
+	-w /home/Web/sensor_monitoring \
+	monitoring:latest
+```
 # Manual of Monitoring
 1. docker.sh에서 <PATH>에 rosbag를 기록할 경로를 작성한다.
 	( -v /home/media/user/SSD:/home/dataset )
@@ -59,6 +58,7 @@
 
 
 # How to build the dockerfile
+```
 $ sudo docker build -t monitoring:latest .
 $ ./docker.sh
 $ exit
@@ -69,18 +69,7 @@ $ sudo docker exec -it monitoring /bin/bash
 
 # How to run it.
 $ ./run.sh
-
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-** Please modify file <<sensorConfig.json>> **
-
-### `./run.sh`
+```
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
