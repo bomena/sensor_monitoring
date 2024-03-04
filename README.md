@@ -27,7 +27,7 @@ sudo docker run --name monitoring -it \
 	bmn3626/sensor_monitoring:2.0
 ```
 # Manual of Monitoring
-1. docker.sh에서 <PATH>에 rosbag를 기록할 경로를 작성한다.
+1. docker.sh에서 PATH에 rosbag를 기록할 경로를 작성한다.
 	( -v /home/media/user/SSD:/home/dataset )
 
 2. sensorConfig.json파일에서 topic과 messageType을 알맞게 변경한다. 형식에 맞춰서 추가 및 삭제는 자유롭다.
