@@ -8,7 +8,7 @@
 
 # DOCKER
 ```
-docker push bmn3626/sensor_monitoring:1.0
+docker pull bmn3626/sensor_monitoring:1.0
 ```
 
 # docker.sh
