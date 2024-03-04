@@ -1,75 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import ROSLIB from 'roslib';
-
-// const RosbagRecord = () => {
-//   const [isOn, setIsOn] = useState(false);
-//   const [timer, setTimer] = useState(0);
-
-//   useEffect(() => {
-//     const ros = new ROSLIB.Ros({ url: 'ws://0.0.0.0:9090' });
-
-//     ros.on('connection', () => {
-//       console.log('Connected to websocket server.');
-//     });
-//     ros.on('error', () => {
-//       console.log('Error connecting to websocket server.');
-//     });
-//     ros.on('close', () => {
-//       console.log('Connection to websocket server closed.');
-//     });
-
-//     const recordPublisher = new ROSLIB.Topic({
-//       ros: ros,
-//       name: '/rosbag_record',
-//       messageType: 'std_msgs/String'
-//     });
-
-//   }, []);
-
-//   useEffect(() => {
-//     let interval = null;
-//     if (isOn) {
-//       interval = setInterval(() => {
-//         setTimer((prevTimer) => prevTimer + 1);
-//       }, 1000);
-//       const message = new ROSLIB.Message({
-//         data: 'ON'
-//       });
-//       recordPublisher.publish(message);
-//     } else {
-//       clearInterval(interval);
-//       setTimer(0); // OFF 상태일 때 타이머 리셋
-//       const message = new ROSLIB.Message({
-//         data: 'OFF'
-//       });
-//       recordPublisher.publish(message);
-//     }
-//     return () => clearInterval(interval);
-//   }, [isOn]);
-
-
-//   const formatTime = (totalSeconds) => {
-//     const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-//     const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-//     const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-//     return `${hours}:${minutes}:${seconds}`;
-//   };
-
-//   const toggleButton = () => {
-//     setIsOn(!isOn);
-//   };
-
-//   return (
-//     <div>
-//       <button onClick={toggleButton}>
-//         {isOn ? `${formatTime(timer)}` : 'OFF'}
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default RosbagRecord;
-
 import React, { useState, useEffect, useRef } from 'react';
 import ROSLIB from 'roslib';
 
@@ -112,7 +40,7 @@ const RosbagRecord = () => {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
-      // useRef를 사용하여 recordPublisher에 접근합니다.
+
       const message = new ROSLIB.Message({
         data: 'ON'
       });
@@ -120,7 +48,7 @@ const RosbagRecord = () => {
     } else {
       clearInterval(interval);
       setTimer(0); // OFF 상태일 때 타이머 리셋
-      // useRef를 사용하여 recordPublisher에 접근합니다.
+
       const message = new ROSLIB.Message({
         data: 'OFF'
       });
