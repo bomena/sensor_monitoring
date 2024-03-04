@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
-import sensorConfig from '../sensorConfig2.json';
+import sensorConfig from '../sensorConfig.json';
 import 'leaflet/dist/leaflet.css';
 import ROSLIB from 'roslib';
 
