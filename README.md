@@ -8,7 +8,7 @@
 
 # DOCKER
 ```
-docker pull bmn3626/sensor_monitoring:1.0
+$ docker pull bmn3626/sensor_monitoring:1.0
 ```
 
 # docker.sh
@@ -24,7 +24,7 @@ sudo docker run --name monitoring -it \
 	-v /dev:/dev \
 	-v <PATH>:/home/dataset \
 	-w /home/Web/sensor_monitoring \
-	monitoring:latest
+	bmn3626/sensor_monitoring:1.0
 ```
 # Manual of Monitoring
 1. docker.sh에서 <PATH>에 rosbag를 기록할 경로를 작성한다.
@@ -38,7 +38,6 @@ sudo docker run --name monitoring -it \
 
 # How to build the dockerfile
 ```
-$ sudo docker build -t monitoring:latest .
 $ ./docker.sh
 $ exit
 
