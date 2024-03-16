@@ -31,7 +31,7 @@ def rosbag_record(data):
         if rosbag_process is not None:
             subprocess.call(["pkill", "-f", "rosbag record"])
             rosbag_process = None
-        rosbag_process = subprocess.Popen(["/home/Web/sensor_monitoring/record.sh"])
+        rosbag_process = subprocess.Popen(["/home/Web/sensor_monitoring/src/function/record.sh"])
     elif data.data == "OFF":
         if rosbag_process:
             subprocess.call(["pkill", "-f", "rosbag record"])
