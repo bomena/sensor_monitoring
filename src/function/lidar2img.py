@@ -14,6 +14,7 @@ class PointCloudToImage:
 
         ################################ MODIFY ####################################
         rospy.Subscriber("/ouster/points", PointCloud2, self.callback)
+        # rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback)
         ############################################################################
 
         self.last_time = time.time()
@@ -25,11 +26,12 @@ class PointCloudToImage:
             self.last_time = current_time
 
             # PointCloud2 데이터를 numpy 배열로 변환
-            pc_array = pc2.read_points(data, field_names=("x", "y", "z"), skip_nans=True)
+            pc_array = pc2.read_points(data, field_names=("x", "y"), skip_nans=True)
             points = np.array(list(pc_array))
+            point = np.unique(points, axis=0)
 
             # 이미지 변환
-            image = self.convert_to_image(points)
+            image = self.convert_to_image(point)
 
             # OpenCV 이미지를 ROS CompressedImage 메시지로 변환
             try:
@@ -49,14 +51,14 @@ class PointCloudToImage:
         fixed_max_y = 20  # Adjust based on expected max value of y
         fixed_min_y = -20  # Adjust based on expected min value of y
 
-        for point in points:
-            # Use fixed scale factors for conversion
-            x_scaled = int(((point[0] - fixed_min_x) / (fixed_max_x - fixed_min_x)) * width)
-            y_scaled = int(((point[1] - fixed_min_y) / (fixed_max_y - fixed_min_y)) * height)
-            y_scaled = height - y_scaled  # Adjust for image coordinate system
+        x_scaled = (points[:, 0] - fixed_min_x) / (fixed_max_x - fixed_min_x)
+        y_scaled = (points[:, 1] - fixed_min_y) / (fixed_max_y - fixed_min_y)
+        x_scaled = (x_scaled * width).astype(np.int32)
+        y_scaled = ((1 - y_scaled) * height).astype(np.int32)
 
-            if 0 <= x_scaled < width and 0 <= y_scaled < height:
-                image[y_scaled, x_scaled] = (255, 255, 255)  # White point
+        valid_indices = (x_scaled >= 0) & (x_scaled < width) & (y_scaled >= 0) & (y_scaled < height)
+
+        image[y_scaled[valid_indices], x_scaled[valid_indices]] = (255, 255, 255)
 
         return image
 
