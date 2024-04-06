@@ -14,9 +14,9 @@ class PointCloudToImage:
         self.image_pub2 = rospy.Publisher("/converted_image2/compressed", CompressedImage, queue_size=1)
         self.image_pub3 = rospy.Publisher("/converted_image3/compressed", CompressedImage, queue_size=1)
 
-        self.image_sub1 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback1)
-        self.image_sub2 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback2)
-        self.image_sub3 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback3)
+        self.image_sub1 = rospy.Subscriber("/ouster1/points", PointCloud2, self.callback1)
+        self.image_sub2 = rospy.Subscriber("/ouster2/points", PointCloud2, self.callback2)
+        self.image_sub3 = rospy.Subscriber("/ouster3/points", PointCloud2, self.callback3)
 
         self.last_time = time.time()
         self.interval = 1  # 이미지를 전송할 시간 간격 (초)

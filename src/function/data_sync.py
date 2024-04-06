@@ -13,9 +13,11 @@ class SensorSyncCheckNode:
         self.last_msg_times = {}
 
         sensors = [
-            ("/color1/image_color/compressed", CompressedImage),
-            ("/color2/image_color/compressed", CompressedImage),
-            ("/os_cloud_node/points", PointCloud2),
+            ("/a65/image_raw/compressed", CompressedImage),
+            ("/blackfly/image_raw/compressed", CompressedImage),
+            ("/ouster1/points", PointCloud2),
+            ("/ouster2/points", PointCloud2),
+            ("/ouster3/points", PointCloud2),
         ]
 
         for topic, msg_type in sensors:
