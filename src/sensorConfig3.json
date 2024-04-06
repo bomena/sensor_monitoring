@@ -1,0 +1,9 @@
+{
+    "Color1": { "topic": "/a65/image_raw/compressed", "messageType": "sensor_msgs/msg/CompressedImage" },
+    "Color2": { "topic": "/blackfly/image_raw/compressed", "messageType": "sensor_msgs/msg/CompressedImage" },
+    "GPS": { "topic": "/novatel/oem7/gps", "messageType": "gps_msgs/msg/GPSFix" },
+    "IMU": { "topic": "/novatel/oem7/imu/data_raw", "messageType": "sensor_msgs/msg/Imu" },
+    "LiDAR1": { "topic": "/converted_image1/compressed", "messageType": "sensor_msgs/msg/CompressedImage" },
+    "LiDAR2": { "topic": "/converted_image2/compressed", "messageType": "sensor_msgs/msg/CompressedImage" },
+    "LiDAR3": { "topic": "/converted_image3/compressed", "messageType": "sensor_msgs/msg/CompressedImage" }
+}

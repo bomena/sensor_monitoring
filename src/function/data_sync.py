@@ -1,51 +1,58 @@
 #!/usr/bin/env python
 import rospy
-from sensor_msgs.msg import PointCloud2, CompressedImage
-from std_msgs.msg import String
-import json
+from sensor_msgs.msg import CompressedImage, PointCloud2
+from std_msgs.msg import Bool
+import time
 
-# 센서 데이터 타임스탬프 저장
-sensor_data_timestamps = {'camera1': 0, 'camera2': 0, 'lidar': 0}
+class SensorSyncCheckNode:
+    def __init__(self):
+        rospy.init_node('sensor_sync_check_node', anonymous=True)
+        self.publisher = rospy.Publisher('/sensor_sync_status', Bool, queue_size=10)
 
-def callback_camera1(data):
-    sensor_data_timestamps['camera1'] = rospy.get_time()
+        self.sensor_subscriptions = []  # No direct equivalent, but we will subscribe in the loop
+        self.last_msg_times = {}
 
-def callback_camera2(data):
-    sensor_data_timestamps['camera2'] = rospy.get_time()
+        sensors = [
+            ("/color1/image_color/compressed", CompressedImage),
+            ("/color2/image_color/compressed", CompressedImage),
+            ("/os_cloud_node/points", PointCloud2),
+        ]
 
-def callback_lidar(data):
-    sensor_data_timestamps['lidar'] = rospy.get_time()
+        for topic, msg_type in sensors:
+            rospy.Subscriber(topic, msg_type, self.sensor_callback, callback_args=topic)
+            self.last_msg_times[topic] = rospy.Time.now()
 
-# 동기화 상태를 전송하기 위한 퍼블리셔
-sync_status_publisher = rospy.Publisher('/sensor_sync_status', String, queue_size=10)
+        self.timer = rospy.Timer(rospy.Duration(1.0), self.check_sensor_sync)
+        self.sync_status_history = []
 
-def check_sync(event):
-    # 모든 센서 데이터 간의 최대 시간 차이 확인
-    timestamps = list(sensor_data_timestamps.values())
-    max_time_diff = max(timestamps) - min(timestamps)
-    
-    # 동기화 상태와 최대 시간 차이를 JSON 형식으로 전송
-    sync_data = {
-        "is_synced": max_time_diff < 0.05,
-        "max_time_diff": max_time_diff
-    }
-    sync_status_publisher.publish(json.dumps(sync_data))
+    def sensor_callback(self, msg, topic):
+        self.last_msg_times[topic] = rospy.Time.now()
 
-def listener():
-    rospy.init_node('sensor_sync_checker', anonymous=True)
+    def check_sensor_sync(self, event):
+        current_time = rospy.Time.now()
+        time_diffs = [(current_time - self.last_msg_times[topic]).to_sec() for topic in self.last_msg_times]
 
-    ########################### MODIFY ##################################
-    rospy.Subscriber("/ouster/points", PointCloud2, callback_lidar)
-    rospy.Subscriber("/cam1/image_color/compressed", CompressedImage, callback_camera1)
-    rospy.Subscriber("/cam2/image_color/compressed", CompressedImage, callback_camera2)
+        # Consider out of sync if time difference is greater than a threshold (e.g., 100ms)
+        out_of_sync = any(diff > 0.1 for diff in time_diffs)  # Conversion to seconds
 
-    # rospy.Subscriber("/os_cloud_node/points", PointCloud2, callback_lidar)
-    # rospy.Subscriber("/color1/image_color/compressed", CompressedImage, callback_camera1)
-    # rospy.Subscriber("/color2/image_color/compressed", CompressedImage, callback_camera2)
-    #####################################################################
+        sync_status = not out_of_sync
+        self.sync_status_history.append(sync_status)
+        if len(self.sync_status_history) > 10:
+            self.sync_status_history.pop(0)
 
-    rospy.Timer(rospy.Duration(5), check_sync)
-    rospy.spin()
+        # If False is counted 7 or more times, publish False, otherwise True
+        if self.sync_status_history.count(False) >= 7:
+            final_status = False
+        else:
+            final_status = True
+
+        self.publisher.publish(Bool(data=final_status))
 
 if __name__ == '__main__':
-    listener()
+    try:
+        sensor_sync_check_node = SensorSyncCheckNode()
+        rospy.spin()
+    except KeyboardInterrupt:
+        rospy.loginfo('Node terminated by the user')
+    except rospy.ROSInterruptException:
+        pass

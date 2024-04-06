@@ -4,14 +4,13 @@ import '../index.css';
 import sensorConfig from '../sensorConfig.json';
 import noSignalImage from '../svg/black.png';
 
-let active = false;
-
-
 const Sensor = () => {
   const [imageSrc1, setImageSrc1] = useState(noSignalImage);
   const [imageSrc2, setImageSrc2] = useState(noSignalImage);
-  const [lidarSrc, setLidarSrc] = useState(noSignalImage);
-  
+  const [lidarSrc1, setLidarSrc1] = useState(noSignalImage);
+  const [lidarSrc2, setLidarSrc2] = useState(noSignalImage);
+  const [lidarSrc3, setLidarSrc3] = useState(noSignalImage);
+
   useEffect(() => {
     const ros = new ROSLIB.Ros({url: 'ws://0.0.0.0:9090'});
     ros.on('connection', () => {
@@ -30,13 +29,19 @@ const Sensor = () => {
         setImageSrc1(imageUrl);
       } else if (sensorId === 'Color2') {
         setImageSrc2(imageUrl);
-      } else if (sensorId === 'LiDAR_img') {
-        setLidarSrc(imageUrl);
-        active = true;
+      } else if (sensorId === 'LiDAR1') {
+        setLidarSrc1(imageUrl);
+        // active = true;
+      } else if (sensorId === 'LiDAR2') {
+        setLidarSrc2(imageUrl);
+        // active = true;
+      } else if (sensorId === 'LiDAR3') {
+        setLidarSrc3(imageUrl);
+        // active = true;
       }
     };
 
-    ['Color1', 'Color2', 'LiDAR_img'].forEach(sensorId => {
+    ['Color1', 'Color2', 'LiDAR1', 'LiDAR2', 'LiDAR3'].forEach(sensorId => {
       const sensorConfigData = sensorConfig[sensorId];
       if (sensorConfigData) {
         const sensorTopic = new ROSLIB.Topic({
@@ -52,7 +57,7 @@ const Sensor = () => {
     });
 
     return () => {
-      ['Color1', 'Color2', 'LiDAR_img'].forEach(sensorId => {
+      ['Color1', 'Color2', 'LiDAR1', 'LiDAR2', 'LiDAR3'].forEach(sensorId => {
         const sensorConfigData = sensorConfig[sensorId];
         if (sensorConfigData) {
           const sensorTopic = new ROSLIB.Topic({
@@ -65,9 +70,15 @@ const Sensor = () => {
             setImageSrc1(noSignalImage);
           } else if (sensorId === 'Color2') {
             setImageSrc2(noSignalImage);
-          } else if (sensorId === 'LiDAR_img') {
-            setLidarSrc(noSignalImage);
-            active = false;
+          } else if (sensorId === 'LiDAR1') {
+            setLidarSrc1(noSignalImage);
+            // active = false;
+          } else if (sensorId === 'LiDAR2') {
+            setLidarSrc2(noSignalImage);
+            // active = false;
+          } else if (sensorId === 'LiDAR3') {
+            setLidarSrc3(noSignalImage);
+            // active = false;
           }
         }
       });
@@ -76,21 +87,25 @@ const Sensor = () => {
   }, []);
 
   const imageStyle = {
-    width: '25vw', // Set your desired width
+    width: '20vw', // Set your desired width
     height: 'auto', // Set your desired height
     margin: '5px'
   };
 
-  const LidarStyle = (isActive) => ({
-    width: isActive ? '45vw' : '25vw',
-    margin: '5px'
-  });
+  const LidarStyle = {
+    width: '20vw',
+    margin: '5vw 0vw',
+  };
 
   return (
     <div className='display_grid'>
-      <img src={imageSrc1} alt="Color Camera 1" style={imageStyle} />
-      <img src={imageSrc2} alt="Color Camera 2" style={imageStyle} />
-      <img src={lidarSrc} alt="Lidar" style={LidarStyle(active)} />
+      <div className='cam_grid'>
+        <img src={imageSrc1} alt="Color Camera 1" style={imageStyle} />
+        <img src={imageSrc2} alt="Color Camera 2" style={imageStyle} />
+      </div>
+      <img src={lidarSrc1} alt="Lidar" style={LidarStyle} />
+      <img src={lidarSrc2} alt="Lidar" style={LidarStyle} />
+      <img src={lidarSrc3} alt="Lidar" style={LidarStyle} />
     </div>
   );
 };

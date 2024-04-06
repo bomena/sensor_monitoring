@@ -1,10 +1,11 @@
 {
-    "Color1": { "topic": "/cam1/image_color/compressed", "messageType": "sensor_msgs/CompressedImage" },
-    "Color2": { "topic": "/cam2/image_color/compressed", "messageType": "sensor_msgs/CompressedImage" },
+    "Color1": { "topic": "/color1/image_color/compressed", "messageType": "sensor_msgs/CompressedImage" },
+    "Color2": { "topic": "/color2/image_color/compressed", "messageType": "sensor_msgs/CompressedImage" },
     "GPS": { "topic": "/gps/fix", "messageType": "sensor_msgs/NavSatFix" },
     "IMU": { "topic": "/gx5/imu/data", "messageType": "sensor_msgs/Imu" },
     "LWIR1": { "topic": "/lwir1/image_raw/compressed", "messageType": "sensor_msgs/CompressedImage" },
     "LWIR2": { "topic": "/lwir2/image_raw/compressed", "messageType": "sensor_msgs/CompressedImage" },
-    "LiDAR": { "topic": "/ouster/points", "messageType": "sensor_msgs/PointCloud2" },
-    "LiDAR_img": { "topic": "/converted_image/compressed", "messageType": "sensor_msgs/CompressedImage" }
+    "LiDAR1": { "topic": "/converted_image1/compressed", "messageType": "sensor_msgs/CompressedImage" },
+    "LiDAR2": { "topic": "/converted_image2/compressed", "messageType": "sensor_msgs/CompressedImage" },
+    "LiDAR3": { "topic": "/converted_image3/compressed", "messageType": "sensor_msgs/CompressedImage" }
 }

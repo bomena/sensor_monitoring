@@ -10,46 +10,52 @@ import time
 class PointCloudToImage:
     def __init__(self):
         self.bridge = CvBridge()
-        self.image_pub = rospy.Publisher("/converted_image/compressed", CompressedImage, queue_size=1)
+        self.image_pub1 = rospy.Publisher("/converted_image1/compressed", CompressedImage, queue_size=1)
+        self.image_pub2 = rospy.Publisher("/converted_image2/compressed", CompressedImage, queue_size=1)
+        self.image_pub3 = rospy.Publisher("/converted_image3/compressed", CompressedImage, queue_size=1)
 
-        ################################ MODIFY ####################################
-        rospy.Subscriber("/ouster/points", PointCloud2, self.callback)
-        # rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback)
-        ############################################################################
+        self.image_sub1 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback1)
+        self.image_sub2 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback2)
+        self.image_sub3 = rospy.Subscriber("/os_cloud_node/points", PointCloud2, self.callback3)
 
         self.last_time = time.time()
         self.interval = 1  # 이미지를 전송할 시간 간격 (초)
 
-    def callback(self, data):
+    def callback1(self, data):
+        self.process_data(data, self.image_pub1)
+
+    def callback2(self, data):
+        self.process_data(data, self.image_pub2)
+
+    def callback3(self, data):
+        self.process_data(data, self.image_pub3)
+
+    def process_data(self, data, publisher):
         current_time = time.time()
         if current_time - self.last_time >= self.interval:
             self.last_time = current_time
 
-            # PointCloud2 데이터를 numpy 배열로 변환
+            # Convert PointCloud2 data to numpy array
             pc_array = pc2.read_points(data, field_names=("x", "y"), skip_nans=True)
             points = np.array(list(pc_array))
             point = np.unique(points, axis=0)
 
-            # 이미지 변환
+            # Convert to image
             image = self.convert_to_image(point)
 
-            # OpenCV 이미지를 ROS CompressedImage 메시지로 변환
+            # Convert OpenCV image to ROS CompressedImage message
             try:
-                ros_image = self.bridge.cv2_to_compressed_imgmsg(image)
-                self.image_pub.publish(ros_image)
+                ros_image = self.bridge.cv2_to_compressed_imgmsg(image, "jpg")
+                publisher.publish(ros_image)
             except CvBridgeError as e:
                 rospy.logerr(e)
 
     def convert_to_image(self, points):
-        height = 411
-        width = 880
+        height, width = 880, 880
         image = np.zeros((height, width, 3), np.uint8)
 
-        # Define fixed scale factors based on expected range of x and y values
-        fixed_max_x = 40  # Adjust based on expected max value of x
-        fixed_min_x = -40  # Adjust based on expected min value of x
-        fixed_max_y = 20  # Adjust based on expected max value of y
-        fixed_min_y = -20  # Adjust based on expected min value of y
+        fixed_max_x, fixed_min_x = 15, -15
+        fixed_max_y, fixed_min_y = 15, -15
 
         x_scaled = (points[:, 0] - fixed_min_x) / (fixed_max_x - fixed_min_x)
         y_scaled = (points[:, 1] - fixed_min_y) / (fixed_max_y - fixed_min_y)
@@ -60,9 +66,7 @@ class PointCloudToImage:
 
         image[y_scaled[valid_indices], x_scaled[valid_indices]] = (255, 255, 255)
 
-        return image
-
-
+        return image  # Ensure to return the generated image
 
 if __name__ == '__main__':
     rospy.init_node('point_cloud_to_image_converter', anonymous=True)
