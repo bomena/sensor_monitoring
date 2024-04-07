@@ -1,7 +1,7 @@
 # FUNCTION
 
 1. rosbag record 용량 및 기록 & 상태 확인
-2. sensor sync 확인(per 5s) : 최대 차이 시간 출력
+2. sensor sync 확인(per 5s)
 3. 각각의 sensor 연결 상태 확인
 4. gps data를 통해 지도에서 실시간 현재 위치 확인 가능
 5. cam과 LiDAR 확인 가능
